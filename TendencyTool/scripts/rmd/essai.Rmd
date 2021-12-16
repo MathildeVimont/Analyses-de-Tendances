@@ -1,0 +1,99 @@
+---
+title: "Analyses de tendances"
+author: "Mathilde Vimont"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+params:
+  data: ""
+  sp: ""
+  interestVar: ""
+  fixedEffects: ""
+  randomEffects: ""
+  factorVariables: ""
+  annualModel: ""
+  annualSum: ""
+  varRange: ""
+  coefs: ""
+  interAnnualModel: ""
+  interAnnualSum: ""
+  plot: ""
+  
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(flexdashboard)
+knitr::opts_chunk$set(echo = TRUE)
+
+sp <- params$sp
+data <- params$data
+interestVar <- params$interestVar
+fixedEffects <- params$fixedEffects
+randomEffects <- params$randomEffects
+factorVariables <- params$factorVariables
+annualModel <- params$annualModel
+annualSum <- params$annualSum
+varRange <- params$varRange
+coefs <- params$coefs
+interAnnualModel <- params$interAnnualModel
+interAnnualSum <- params$interAnnualSum
+plot <- params$plot
+
+```
+
+# Contexte
+
+On veut savoir quelle est la tendance d’évolution de l’abondance de l’espèce **_`r sp`_** sur les dernières années **(`r min(data$year)`-`r max(data$year)`)** i.e, si cette espèce voit son abondance augmenter, diminuer ou rester stable. <br>
+
+La métrique que vous avez choisie pour représenter cette abondance est : **`r interestVar`**
+
+```{r control, echo=FALSE}
+effects <- c(fixedEffects, randomEffects)
+effects <- effects[effects != "year"]
+
+```
+
+Pour étudier cette tendance, il est nécessaire de prendre en compte tout un ensemble de paramètres qui pourraient aussi jouer sur l’abondance (ex : localisation) ou indirectement sur la perception d’abondance de cette espèce (ex : type de protocole, conditions météorologiques, type d’outil, …). <br>
+
+Les variables que vous avez choisies pour faire ce contrôle sont : **`r effects`**
+
+# 1. Tendance globale 
+
+Le modèle que vous avez choisi de réaliser est le suivant, avec une distribution de *`r annualModel$modelInfo$family$family`* :
+
+```{r echo=FALSE}
+annualModel$call$formula
+```
+
+```{r echo=FALSE}
+sign <- ifelse(annualSum["year",]$Significant == "Yes",
+               "est jugé comme significativement différent de 0",
+               "n'est pas jugé comme significativement différent de 0")
+```
+
+Les résultats de cette régression sont regroupés dans le tableau suivant. On observe que le coefficient associé à la variable *year* `r sign`.
+
+```{r echo=FALSE}
+kable(annualSum)
+```
+
+```{r echo=FALSE}
+typeEvol <- ifelse(coefs$perc < 0, "diminution", "augmentation")
+```
+
+La tendance d'évolution de l'espèce **_`r sp`_** entre **`r min(data$year)`** et **`r max(data$year)`** est la suivante : l'abondance a été multipliée par `r coefs$trend`, ce qui correspond à une **`r typeEvol` de `r abs(coefs$perc)` %**.
+
+
+# 2. Variations inter-annuelles
+
+Ce graphique permet de voir l'évolution de l'abondance par rapport à l'année de référence, `r min(data$year)`. 
+
+```{r echo=FALSE}
+plot
+```
+
+# 3. Et la qualité des modèles ?
+
+```{r echo=FALSE}
+
+```

@@ -51,4 +51,3 @@ writeFormula <- function(interestVar = "count",
   return(regrFormula)
 }
 
-

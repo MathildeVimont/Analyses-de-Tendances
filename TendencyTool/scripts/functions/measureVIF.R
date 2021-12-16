@@ -9,7 +9,7 @@ measureVIF <- function (model) {
   
   # Extract variance-Covariance matrix from model output
   v <- vcov(model)$cond
-
+  
   # Exclude intercepts
   v <- v[-1,-1]
   

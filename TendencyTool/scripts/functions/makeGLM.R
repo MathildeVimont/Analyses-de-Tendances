@@ -26,10 +26,10 @@ makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
   if (class(data) != "data.frame"){
     stop("'data' should be a data.frame")
   }
-
+  
   # Check that all variables exist
   vars <- c(interestVar, fixedEffects, randomEffects)
-
+  
   if (any(!(vars %in% colnames(data)))){
     missingVars <- vars[which(!(vars %in% colnames(data)))]
     stop("the variable '", paste0(missingVars, "' is not found in dataframe"))
@@ -93,6 +93,6 @@ makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
   ##################
   # Save estimates #
   ##################
-  
   return(model)
+  
 }

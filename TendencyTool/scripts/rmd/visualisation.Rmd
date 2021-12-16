@@ -1,0 +1,38 @@
+---
+title: "Visualisation des résultats du modèle"
+author: "Mathilde Vimont"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+params:
+  data: ""
+  annualModel: ""
+  interannualModel: ""
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+data <- params$data
+annualModel <- params$annualModel
+interannualModel <- params$interannualModel
+
+```
+
+# Tendance globale
+
+BLABLA
+
+```{r cars}
+
+kable(sum, )
+```
+
+# Variations inter-annuelles
+
+BLABLA
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+

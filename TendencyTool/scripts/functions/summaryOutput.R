@@ -14,6 +14,7 @@
 #' A dataframe containing outputs of a regression model, that is correctly formatted 
 #' 
 #' @example 
+
 summaryOutput <- function(model,
                           distribution = "gaussian", 
                           factorVariables = NULL,
@@ -36,12 +37,12 @@ summaryOutput <- function(model,
   
   # Erase T/Z Values and save pvalues
   dataCoef$z.value <- NULL
-
+  
   # If numeric variables have been scaled, then rescale estimates
   if (rescale){
     dataCoef <- rescaleParam(dataCoef, data, fixedEffects, factorVariables)
   }
-  
+
   # Create confidence interval
   dataCoef$IC_inf <- dataCoef$Estimate - 1.96 * dataCoef$Std..Error
   dataCoef$IC_sup <- dataCoef$Estimate + 1.96 * dataCoef$Std..Error
@@ -91,4 +92,3 @@ summaryOutput <- function(model,
   return(dataCoef)
   
 }
-

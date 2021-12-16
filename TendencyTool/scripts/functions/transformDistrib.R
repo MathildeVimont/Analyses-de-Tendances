@@ -19,6 +19,7 @@ transformDistrib <- function(value, distribution = "gaussian"){
     stop("param 'distribution' should be either 'gaussian', 'binomial' or 'poisson'")
   }
   
+  
   # No transformation if gaussian
   if(distribution == "gaussian"){
     transfValue <- value
@@ -32,7 +33,6 @@ transformDistrib <- function(value, distribution = "gaussian"){
   ## Logit-transformation if binomial
   else if(distribution == "binomial"){
     transfValue <- exp(value) / (1 + exp(value))
-    
     
   }
   
