@@ -3,7 +3,7 @@
 #' A function that formats the output of a regression model
 #' 
 #' @param model an object containing results from the regression model 
-#' @param distribution a `string` that is the distribution used in the model ("gaussian", "poisson", "binomial")
+#' @param distribution a `string` that is the distribution used in the model ("gaussian", "poisson", "binomial", "nbinom2")
 #' @param factorVariables a `vector` containing variables that should be treated as factor
 #' @param transform a `boolean`, TRUE if coefficients should be tranformed due to distribution
 #' @param rescale a `boolean`, TRUE if numeric variables estimates should be rescaled
@@ -14,7 +14,6 @@
 #' A dataframe containing outputs of a regression model, that is correctly formatted 
 #' 
 #' @example 
-
 summaryOutput <- function(model,
                           distribution = "gaussian", 
                           factorVariables = NULL,
@@ -42,7 +41,7 @@ summaryOutput <- function(model,
   if (rescale){
     dataCoef <- rescaleParam(dataCoef, data, fixedEffects, factorVariables)
   }
-
+  
   # Create confidence interval
   dataCoef$IC_inf <- dataCoef$Estimate - 1.96 * dataCoef$Std..Error
   dataCoef$IC_sup <- dataCoef$Estimate + 1.96 * dataCoef$Std..Error
@@ -53,7 +52,7 @@ summaryOutput <- function(model,
     dataCoef$Std..Error <- transformDistrib(dataCoef$Std..Error, distribution)
     dataCoef$IC_inf <- transformDistrib(dataCoef$IC_inf, distribution)
     dataCoef$IC_sup <- transformDistrib(dataCoef$IC_sup, distribution)
-
+    
   }
   
   # Interpret pvalues as significant or not
@@ -69,7 +68,7 @@ summaryOutput <- function(model,
   
   # Keep format as data.frame
   dataCoef <- data.frame(dataCoef)
-
+  
   # Add a significant column to the summary
   dataCoef$sign <- sign
   
@@ -92,3 +91,4 @@ summaryOutput <- function(model,
   return(dataCoef)
   
 }
+

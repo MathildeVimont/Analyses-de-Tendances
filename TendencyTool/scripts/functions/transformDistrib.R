@@ -3,7 +3,7 @@
 #' A function that transforms a value depending on the chosen distribution
 #' 
 #' @param x a `numeric` value to transform
-#' @param distribution a `string` that is the distribution used in the model ("gaussian", "poisson", "binomial")
+#' @param distribution a `string` that is the distribution used in the model ("gaussian", "poisson", "binomial", "nbinom2")
 #' 
 #' @return 
 #' The value transformed according to distribution 
@@ -15,10 +15,9 @@ transformDistrib <- function(value, distribution = "gaussian"){
     stop("param 'value' should be numeric")
   }
   
-  if(!(distribution %in% c("gaussian", "binomial", "poisson"))){
-    stop("param 'distribution' should be either 'gaussian', 'binomial' or 'poisson'")
+  if(!(distribution %in% c("gaussian", "binomial", "poisson", "nbinom2"))){
+    stop("param 'distribution' should be either 'gaussian', 'binomial', 'poisson' ou 'nbinom2'")
   }
-  
   
   # No transformation if gaussian
   if(distribution == "gaussian"){
@@ -26,13 +25,14 @@ transformDistrib <- function(value, distribution = "gaussian"){
   }
   
   ## Log-transformation if poisson
-  else if(distribution == "poisson"){
+  else if(distribution == "poisson" | distribution == "nbinom2"){
     transfValue <- exp(value)
   }
   
   ## Logit-transformation if binomial
   else if(distribution == "binomial"){
     transfValue <- exp(value) / (1 + exp(value))
+    
     
   }
   
@@ -46,6 +46,7 @@ transformDistrib <- function(value, distribution = "gaussian"){
 # test_that("transformDistrib makes right calculation", {
 #   expect_equal(transformDistrib(value = 10, distribution = "gaussian"), 10)
 #   expect_equal(transformDistrib(value = 10, distribution = "poisson"), exp(10))
+#   expect_equal(transformDistrib(value = 10, distribution = "nbinom2"), exp(10))
 #   expect_equal(transformDistrib(value = 10, distribution = "binomial"), exp(10) / (1 + exp(10)) )
 #   
 # })

@@ -7,7 +7,7 @@
 #' @param randomEffects a `vector` of variables that should be treated as random effects
 #' @param factorVariables a `vector` of variables that should be treated as factors
 #' @param method a `string` corresponding to the method that must be applied (by default : "glm")
-#' @param distribution a `string` containing the chosen distribution (by default : "poisson")
+#' @param distribution a `string` containing the chosen distribution between "gaussian", "poisson", "binomial", "nbinom2" (by default : "gaussian")
 #' @param scaling a `boolean` indicating whether numeric variables should be scaled
 #'
 #' @importFrom glmmTMB glmmTMB
@@ -16,7 +16,7 @@
 #' @example
 makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
                     randomEffects = NULL, factorVariables = NULL,
-                    method = "glm", distribution = "poisson",
+                    method = "glm", distribution = "gaussian",
                     scaling = FALSE){
   ####################
   # Error management #
@@ -36,8 +36,8 @@ makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
   }
   
   # Check distribution exists
-  if (!(distribution %in% c("binomial", "gaussian", "poisson"))){
-    stop("the chosen distribution doesn't exist. \nPlease chose between : binomial, gaussian or poisson")
+  if (!(distribution %in% c("binomial", "gaussian", "poisson", "nbinom2"))){
+    stop("the chosen distribution doesn't exist. \nPlease chose between : binomial, gaussian, poisson or nbinom2")
   }
   
   
@@ -85,7 +85,7 @@ makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
   #####################
   
   if (method == "glm") {
-    model <- catchConditions(glmmTMB(formula, data = data, family = "poisson"))
+    model <- catchConditions(glmmTMB(formula, data = data, family = distribution))
     
   }
   
@@ -93,6 +93,6 @@ makeGLM <- function(data, interestVar = "count", fixedEffects = NULL,
   ##################
   # Save estimates #
   ##################
-  return(model)
   
+  return(model)
 }
